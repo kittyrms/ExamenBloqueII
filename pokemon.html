@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>POKEMON!</title>
+        <script src="./js/pokemon.js"></script>
+        <link rel="stylesheet" href="./styles.css">
+    </head>
+    <body>
+        <section id="seleccionar-pokemon">
+            <h1 class="titulo">Pokemon</h1>
+
+            <h2 class="subtitulo">Elige tu pokemon:</h2>
+
+            <div class="tarjetas">
+                <input type="radio" name="pokemon" id="Charmander" />
+                <label class="tarjeta-de-pokemon" for="Charmander">
+                    <p>Charmander</p>
+                    <img src="./assets/Charmander.png" alt="Charmander">
+                </label>
+                
+                <input type="radio" name="pokemon" id="Vulpix" />
+                <label class="tarjeta-de-pokemon" for="Vulpix">
+                    <p>Vulpix</p>
+                    <img src="./assets/Vulpix.png" alt="Vulpix">
+                </label>
+
+                <input type="radio" name="pokemon" id="Ninetales" />
+                <label class="tarjeta-de-pokemon" for="Ninetales">
+                    <p>Ninetales</p>
+                    <img src="./assets/Ninetales.png" alt="Ninetales">
+                </label>
+
+                <input type="radio" name="pokemon" id="Cubone" />
+                <label class="tarjeta-de-pokemon" for="Cubone">
+                    <p>Cubone</p>
+                    <img src="./assets/Cubone.png" alt="Cubone">
+                </label>
+
+                <input type="radio" name="pokemon" id="Piplup" />
+                <label class="tarjeta-de-pokemon" for="Piplup">
+                    <p>Piplup</p>
+                    <img src="./assets/Piplup.png" alt="Piplup">
+                </label>
+            </div>
+
+            <button id="boton-pokemon">Seleccionar</button>
+        </section>
+
+        <section id="seleccionar-ataque">
+            <h1 class="titulo">Pokemon</h1>
+
+            <h2 class="subtitulo">Elige tu ataque:</h2>
+
+            <div class="tarjetas-ataques">
+                <button id="boton-fuego" class="boton-de-ataque">Fuego 🔥</button>
+                <button id="boton-agua" class="boton-de-ataque">Agua 💧</button>
+                <button id="boton-tierra" class="boton-de-ataque">Tierra 🌱</button>
+                <button id="boton-hielo" class="boton-de-ataque">Hielo🧊</button>
+            </div>
+
+            <div id="mensajes">
+                <p id="resultado">Mucha suerte</p>
+
+                <section id="reiniciar">
+                    <button id="boton-reiniciar">Reiniciar</button>
+                </section>
+            </div>
+
+            <div class="ataques">
+                <div class="ataques-jugador">
+                    <p id="vidas-jugador">3</p>
+                    <p id="pokemon-jugador"></p>
+                    <div id="ataques-del-jugador"></div>
+                </div>
+                <div class="ataques-enemigo">
+                    <p id="vidas-enemigo">3</p>
+                    <p id="pokemon-enemigo"></p>
+                    <div id="ataques-del-enemigo"></div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
