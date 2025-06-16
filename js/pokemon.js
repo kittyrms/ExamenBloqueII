@@ -1,190 +1,372 @@
-let ataqueJugador
-let ataqueEnemigo
+const sectionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
+const sectionReiniciar = document.getElementById('reiniciar')
+const botonPokemonJugador = document.getElementById('boton-pokemon')
+const botonReiniciar = document.getElementById('boton-reiniciar')
+sectionReiniciar.style.display = 'none'
+
+const sectioSeleccionarPokemon = document.getElementById('seleccionar-pokemon')
+const spanPokemonJugador = document.getElementById('pokemon-jugador')
+
+const spanPokemonEnemigo = document.getElementById('pokemon-enemigo')
+
+const spanVidasJugador = document.getElementById('vidas-jugador')
+const spanVidasEnemigo = document.getElementById('vidas-enemigo')
+
+const sectionMensajes = document.getElementById('resultado')
+const ataquesDelJugador = document.getElementById('ataques-del-jugador')
+const ataquesDelEnemigo = document.getElementById('ataques-del-enemigo')
+const contenedorTarjetas = document.getElementById('contenedorTarjetas')
+const contenedorAtaques = document.getElementById('contenedorAtaques')
+
+let pokemones = []
+let ataqueJugador =[]
+let ataqueEnemigo = []
+let opcionDePokemones
+let inputLapras
+let inputVulpix
+let inputNinetales
+let inputCubone
+let inputPiplup
+let pokemonJugador
+let ataquesPokemon
+let ataquesPokemonEnemigo
+let botonFuego
+let botonAgua
+let botonTierra
+let botonHielo
+let botonElectrico
+let botones = []
+let indexAtaqueJugador
+let indexAtaqueEnemigo
+let victoriasJugador = 0
+let victoriasEnemigo = 0 
 let vidasJugador = 3
 let vidasEnemigo = 3
 
+class Pokemon {
+    constructor(nombre, foto, vida) {
+        this.nombre = nombre
+        this.foto = foto
+        this.vida = vida
+        this.ataques = []
+    }
+}
+
+let lapras = new Pokemon('Lapras', './assets/Lapras.png', 5)
+
+let vulpix= new Pokemon('Vulpix', './assets/Vulpix.png', 5)
+
+let ninetales= new Pokemon('Ninetales', './assets/Ninetales.png', 5)
+
+let cubone= new Pokemon('Cubone', './assets/Cubone.png', 5)
+
+let piplup= new Pokemon('Piplup', './assets/Piplup.png', 5)
+
+lapras.ataques.push(
+    { nombre: '🧊', id: 'boton-agua' },
+    { nombre: '⚡', id: 'boton-agua' },
+    { nombre: '💧', id: 'boton-agua' },
+    { nombre: '🔥', id: 'boton-fuego' },
+    { nombre: '🌱', id: 'boton-tierra' },
+)
+
+vulpix.ataques.push(
+    { nombre: '🔥', id: 'boton-tierra' },
+    { nombre: '⚡', id: 'boton-tierra' },
+    { nombre: '💧', id: 'boton-tierra' },
+    { nombre: '🧊', id: 'boton-agua' },
+    { nombre: '🌱', id: 'boton-fuego' },
+    
+)
+
+ninetales.ataques.push(
+    { nombre: '🔥', id: 'boton-fuego' },
+    { nombre: '⚡', id: 'boton-fuego' },
+    { nombre: '💧', id: 'boton-fuego' }, 
+    { nombre: '🧊', id: 'boton-agua' },
+    { nombre: '🌱', id: 'boton-tierra' },
+)
+
+cubone.ataques.push(
+    { nombre: '🌱', id: 'boton-agua' },
+    { nombre: '⚡', id: 'boton-agua' },
+    { nombre: '💧', id: 'boton-agua' },
+    { nombre: '🔥', id: 'boton-fuego' },
+    { nombre: '🧊', id: 'boton-tierra' },
+)
+
+piplup.ataques.push(
+    { nombre: '💧', id: 'boton-tierra' },
+    { nombre: '⚡', id: 'boton-tierra' },
+    { nombre: '🌱', id: 'boton-tierra' },
+    { nombre: '🧊', id: 'boton-agua' },
+    { nombre: '🔥', id: 'boton-fuego' },
+    
+)
+
+pokemones.push(lapras,vulpix,ninetales,cubone,piplup)
+
 function iniciarJuego() {
-    let sectionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
+    
     sectionSeleccionarAtaque.style.display = 'none'
 
-    let sectionReiniciar = document.getElementById('reiniciar')
-    sectionReiniciar.style.display = 'none'
+    pokemones.forEach((pokemon) => {
+        opcionDePokemones = `
+        <input type="radio" name="pokemon" id=${pokemon.nombre} />
+        <label class="tarjeta-de-pokemon" for=${pokemon.nombre}>
+            <p>${pokemon.nombre}</p>
+            <img src=${pokemon.foto} alt=${pokemon.nombre}>
+        </label>
+        `
+    contenedorTarjetas.innerHTML += opcionDePokemones
+
+     inputLapras = document.getElementById('Lapras')
+     inputVulpix = document.getElementById('Vulpix')
+     inputNinetales = document.getElementById('Ninetales')
+     inputCubone = document.getElementById('Cubone')
+     inputPiplup = document.getElementById('Piplup')
+
+    })
     
-    let botonMascotaJugador = document.getElementById('boton-pokemon')
-    botonMascotaJugador.addEventListener('click', seleccionarPokemonJugador)
+    botonPokemonJugador.addEventListener('click', seleccionarPokemonJugador)
 
-    let botonFuego = document.getElementById('boton-fuego')
-    botonFuego.addEventListener('click', ataqueFuego)
-    let botonAgua = document.getElementById('boton-agua')
-    botonAgua.addEventListener('click', ataqueAgua)
-    let botonTierra = document.getElementById('boton-tierra')
-    botonTierra.addEventListener('click', ataqueTierra)
-    let botonHielo = document.getElementById('boton-hielo')
-    botonHielo.addEventListener('click', ataqueHielo)
+    
+    
 
-    let botonReiniciar = document.getElementById('boton-reiniciar')
+    
     botonReiniciar.addEventListener('click', reiniciarJuego)
 }
 
 function seleccionarPokemonJugador() {
-    let sectionSeleccionarMascota = document.getElementById('seleccionar-pokemon')
-    sectionSeleccionarMascota.style.display = 'none'
     
-    let sectionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
+    sectioSeleccionarPokemon.style.display = 'none'
+    
+    
     sectionSeleccionarAtaque.style.display = 'flex'
     
-    let inputCharmander = document.getElementById('Charmander')
-    let inputVulpix = document.getElementById('Vulpix')
-    let inputNinetales = document.getElementById('Ninetales')
-    let inputCubone = document.getElementById('Cubone')
-    let inputPiplup = document.getElementById('Piplup')
-    let spanPokemonJugador = document.getElementById('pokemon-jugador')
     
-    if (inputCharmander.checked) {
-        spanPokemonJugador.innerHTML = 'Charmander'
+    
+    if (inputLapras.checked) {
+        spanPokemonJugador.innerHTML = inputLapras.id
+        pokemonJugador = inputLapras.id
     } else if (inputVulpix.checked) {
-        spanPokemonJugador.innerHTML = 'Vulpix'
+        spanPokemonJugador.innerHTML = inputVulpix.id
+        pokemonJugador = inputVulpix.id
     } else if (inputNinetales.checked) {
-        spanPokemonJugador.innerHTML = 'Ninetales'
+        spanPokemonJugador.innerHTML = inputNinetales.id
+        pokemonJugador = inputNinetales.id
     } else if (inputCubone.checked) {
-        spanPokemonJugador.innerHTML = 'Cubone'
+        spanPokemonJugador.innerHTML = inputCubone.id
+        pokemonJugador = inputCubone.id
     } else if (inputPiplup.checked) {
-        spanPokemonJugador.innerHTML = 'Piplup'
+        spanPokemonJugador.innerHTML = inputPiplup.id
+        pokemonJugador = inputPiplup.id
     } else {
         alert('Selecciona un pokemon')
     }
 
+    extraerAtaques(pokemonJugador)
     seleccionarPokemonEnemigo()
 }
 
-function seleccionarPokemonEnemigo() {
-    let mascotaAleatoria = aleatorio(1,5)
-    let spanMascotaEnemigo = document.getElementById('pokemon-enemigo')
-
-    if (mascotaAleatoria == 1) {
-        spanMascotaEnemigo.innerHTML = 'Charmander'
-    } else if (mascotaAleatoria == 2) {
-        spanMascotaEnemigo.innerHTML = 'Vulpix'
-    } else if (mascotaAleatoria == 2) {
-        spanMascotaEnemigo.innerHTML = 'Ninetales'
-    } else if (mascotaAleatoria == 2) {
-        spanMascotaEnemigo.innerHTML = 'Cubone'
-    } else {
-        spanMascotaEnemigo.innerHTML = 'Piplup'
+function extraerAtaques(pokemonJugador) {
+    let ataques
+    for (let i = 0; i < pokemones.length; i++) {
+        if (pokemonJugador === pokemones[i].nombre) {
+            ataques = pokemones[i].ataques
+        }
+        
     }
+    mostrarAtaques(ataques)
 }
 
-function ataqueFuego() {
-    ataqueJugador = 'FUEGO'
-    ataqueAleatorioEnemigo()
+function mostrarAtaques(ataques) {
+    ataques.forEach((ataque) => {
+        ataquesPokemon = `
+        <button id=${ataque.id} class="boton-de-ataque BAtaque">${ataque.nombre}</button>
+        `
+        contenedorAtaques.innerHTML += ataquesPokemon
+    })
+
+    botonFuego = document.getElementById('boton-fuego')
+    botonAgua = document.getElementById('boton-agua')
+    botonTierra = document.getElementById('boton-tierra')
+    botonHielo= document.getElementById ('boton-hielo')
+    botonElectrico= document.getElementById ('boton-electrico')
+    botones = document.querySelectorAll('.BAtaque')
 }
-function ataqueAgua() {
-    ataqueJugador = 'AGUA'
-    ataqueAleatorioEnemigo()
+
+function secuenciaAtaque() {
+    botones.forEach((boton) => {
+        boton.addEventListener('click', (e) => {
+            if (e.target.textContent === '🔥') {
+                ataqueJugador.push('FUEGO')
+                console.log(ataqueJugador)
+                boton.style.background = '#112f58'
+                boton.disabled = true   
+            } else if (e.target.textContent === '💧') {
+                ataqueJugador.push('AGUA')
+                console.log(ataqueJugador)
+                boton.style.background = '#112f58'
+                boton.disabled = true  
+            } else if (e.target.textContent === '🌱') {
+                ataqueJugador.push('TIERRA')
+                console.log(ataqueJugador)
+                boton.style.background = '#112f58'
+                boton.disabled = true  
+            } else if (e.target.textContent === '🧊') {
+                ataqueJugador.push('HIELO')
+                console.log(ataqueJugador)
+                boton.style.background = '#112f58'
+                boton.disabled = true  
+            } else {
+                ataqueJugador.push('ELECTRICO')
+                console.log(ataqueJugador)
+                boton.style.background = '#112f58'
+                boton.disabled = true  
+            }
+            ataqueAleatorioEnemigo()
+        })
+    })
+    
+
 }
-function ataqueTierra() {
-    ataqueJugador = 'TIERRA'
-    ataqueAleatorioEnemigo()
-}
-function ataqueHielo() {
-    ataqueJugador = 'HIELO'
-    ataqueAleatorioEnemigo()
+
+function seleccionarPokemonEnemigo() {
+    let pokemonAleatorio = aleatorio(0, pokemones.length -1)
+
+    spanPokemonEnemigo.innerHTML = pokemones[pokemonAleatorio].nombre
+    ataquesPokemonEnemigo = pokemones[pokemonAleatorio].ataques
+    secuenciaAtaque()
 }
 
 function ataqueAleatorioEnemigo() {
-    let ataqueAleatorio = aleatorio(1,4)
+    let ataqueAleatorio = aleatorio(0,ataquesPokemonEnemigo.length -1)
     
-    if (ataqueAleatorio == 1) {
-        ataqueEnemigo = 'FUEGO'
-    } else if (ataqueAleatorio == 2) {
-        ataqueEnemigo = 'AGUA'
-    } else if (ataqueAleatorio == 3) {
-        ataqueEnemigo = 'TIERRA'
+    if (ataqueAleatorio == 0 || ataqueAleatorio ==1) {
+        ataqueEnemigo.push('FUEGO')
+    } else if (ataqueAleatorio == 3 || ataqueAleatorio == 4) {
+        ataqueEnemigo.push('AGUA')
+    } else if (ataqueAleatorio == 3 || ataqueAleatorio == 4) {
+        ataqueEnemigo.push('TIERRA')
+    } else if (ataqueAleatorio == 3 || ataqueAleatorio == 4) {
+        ataqueEnemigo.push('HIELO')
     } else {
-        ataqueEnemigo = 'HIELO'
+        ataqueEnemigo.push('ELECTRICO')
     }
+    console.log(ataqueEnemigo)
+    iniciarPelea()
+}
 
-    combate()
+function iniciarPelea() {
+    if (ataqueJugador.length === 5) {
+        combate()
+    }
+}
+
+function indexAmbosOponente(jugador, enemigo) {
+    indexAtaqueJugador = ataqueJugador[jugador]
+    indexAtaqueEnemigo = ataqueEnemigo[enemigo]
 }
 
 function combate() {
-    let spanVidasJugador = document.getElementById('vidas-jugador')
-    let spanVidasEnemigo = document.getElementById('vidas-enemigo')
     
-    if(ataqueEnemigo == ataqueJugador) {
-        crearMensaje("EMPATE")
-    } else if(ataqueJugador == 'FUEGO' && ataqueEnemigo == 'TIERRA') {
-        crearMensaje("GANASTE")
-        vidasEnemigo--
-        spanVidasEnemigo.innerHTML = vidasEnemigo
-    } else if(ataqueJugador == 'AGUA' && ataqueEnemigo == 'FUEGO') {
-        crearMensaje("GANASTE")
-        vidasEnemigo--
-        spanVidasEnemigo.innerHTML = vidasEnemigo
-    } else if(ataqueJugador == 'TIERRA' && ataqueEnemigo == 'AGUA') {
-        crearMensaje("GANASTE")
-        vidasEnemigo--
-        spanVidasEnemigo.innerHTML = vidasEnemigo
-    } else if(ataqueJugador == 'FUEGO' && ataqueEnemigo == 'HIELO') {
-        crearMensaje("GANASTE")
-        vidasEnemigo--
-        spanVidasEnemigo.innerHTML = vidasEnemigo
-    } else if(ataqueJugador == 'HIELO' && ataqueEnemigo == 'TIERRA') {
-        crearMensaje("GANASTE")
-        vidasEnemigo--
-        spanVidasEnemigo.innerHTML = vidasEnemigo
-    } else if(ataqueJugador == 'AGUA' && ataqueEnemigo == 'HIELO') {
-        crearMensaje("GANASTE")
-        vidasEnemigo--
-        spanVidasEnemigo.innerHTML = vidasEnemigo
-    } else {
-        crearMensaje("PERDISTE")
-        vidasJugador--
-        spanVidasJugador.innerHTML = vidasJugador
+    for (let index = 0; index < ataqueJugador.length; index++) {
+        if(ataqueJugador[index] === ataqueEnemigo[index]) {
+            indexAmbosOponente(index, index)
+            crearMensaje("EMPATE")
+        } else if (ataqueJugador[index] === 'FUEGO' && ataqueEnemigo[index] === 'TIERRA') {
+            indexAmbosOponente(index, index)
+            crearMensaje("GANASTE")
+            victoriasJugador++
+            spanVidasJugador.innerHTML = victoriasJugador
+        } else if (ataqueJugador[index] ==='AGUA' && ataqueEnemigo[index] === 'FUEGO') {
+            indexAmbosOponente(index, index)
+            crearMensaje("GANASTE")
+            victoriasJugador++
+            spanVidasJugador.innerHTML = victoriasJugador
+        } else if (ataqueJugador[index] === 'TIERRA' && ataqueEnemigo[index] === 'AGUA') {
+            indexAmbosOponente(index, index)
+            crearMensaje("GANASTE")
+            victoriasJugador++
+            spanVidasJugador.innerHTML = victoriasJugador
+        } else if (ataqueJugador[index] === 'HIELO' && ataqueEnemigo[index] === 'AGUA') {
+            indexAmbosOponente(index, index)
+            crearMensaje("GANASTE")
+            victoriasJugador++
+            spanVidasJugador.innerHTML = victoriasJugador
+        } else if (ataqueJugador[index] === 'ELECTRICO' && ataqueEnemigo[index] === 'HIELO') {
+            indexAmbosOponente(index, index)
+            crearMensaje("GANASTE")
+            victoriasJugador++
+            spanVidasJugador.innerHTML = victoriasJugador
+        } else if (ataqueJugador[index] === 'ELECTRICO' && ataqueEnemigo[index] === 'AGUA') {
+            indexAmbosOponente(index, index)
+            crearMensaje("GANASTE")
+            victoriasJugador++
+            spanVidasJugador.innerHTML = victoriasJugador
+        } else if (ataqueJugador[index] === 'FUEGO' && ataqueEnemigo[index] === 'HIELO') {
+            indexAmbosOponente(index, index)
+            crearMensaje("GANASTE")
+            victoriasJugador++
+            spanVidasJugador.innerHTML = victoriasJugador
+        } else if (ataqueJugador[index] === 'TIERRA' && ataqueEnemigo[index] === 'ELECTRICO') {
+            indexAmbosOponente(index, index)
+            crearMensaje("GANASTE")
+            victoriasJugador++
+            spanVidasJugador.innerHTML = victoriasJugador
+        } else if (ataqueJugador[index] === 'HIELO' && ataqueEnemigo[index] === 'TIERRA') {
+            indexAmbosOponente(index, index)
+            crearMensaje("GANASTE")
+            victoriasJugador++
+            spanVidasJugador.innerHTML = victoriasJugador
+        } else if (ataqueJugador[index] === 'ELECTRICO' && ataqueEnemigo[index] === 'FUEGO') {
+            indexAmbosOponente(index, index)
+            crearMensaje("EMPATE")
+            victoriasJugador++
+            spanVidasJugador.innerHTML = victoriasJugador
+        } else {
+            indexAmbosOponente(index, index)
+            crearMensaje("PERDISTE")
+            victoriasEnemigo++
+            spanVidasEnemigo.innerHTML = victoriasEnemigo
+        }
     }
 
     revisarVidas()
 }
 
 function revisarVidas() {
-    if (vidasEnemigo == 0) {
+    if (victoriasJugador === victoriasEnemigo) {
+        crearMensajeFinal("Esto fue un empate!!!")
+    } else if (victoriasJugador > victoriasEnemigo) {
         crearMensajeFinal("FELICITACIONES! Ganaste :)")
-    } else if (vidasJugador == 0) {
+    } else {
         crearMensajeFinal('Lo siento, perdiste :(')
     }
 }
 
 function crearMensaje(resultado) {
-    let sectionMensajes = document.getElementById('resultado')
-    let ataquesDelJugador = document.getElementById('ataques-del-jugador')
-    let ataquesDelEnemigo = document.getElementById('ataques-del-enemigo')
+    
     
     let nuevoAtaqueDelJugador = document.createElement('p')
     let nuevoAtaqueDelEnemigo = document.createElement('p')
 
     sectionMensajes.innerHTML = resultado
-    nuevoAtaqueDelJugador.innerHTML = ataqueJugador
-    nuevoAtaqueDelEnemigo.innerHTML = ataqueEnemigo
+    nuevoAtaqueDelJugador.innerHTML = indexAtaqueJugador
+    nuevoAtaqueDelEnemigo.innerHTML = indexAtaqueEnemigo
 
     ataquesDelJugador.appendChild(nuevoAtaqueDelJugador)
     ataquesDelEnemigo.appendChild(nuevoAtaqueDelEnemigo)
 }
 
 function crearMensajeFinal(resultadoFinal) {
-    let sectionMensajes = document.getElementById('resultado')
+    
     
     sectionMensajes.innerHTML = resultadoFinal
 
-    let botonFuego = document.getElementById('boton-fuego')
-    botonFuego.disabled = true
-    let botonAgua = document.getElementById('boton-agua')
-    botonAgua.disabled = true
-    let botonTierra = document.getElementById('boton-tierra')
-    botonTierra.disabled = true
-    let botonHielo = document.getElementById('boton-hielo')
-    botonTierra.disabled = true
 
-    let sectionReiniciar = document.getElementById('reiniciar')
+    
     sectionReiniciar.style.display = 'block'
 }
 
